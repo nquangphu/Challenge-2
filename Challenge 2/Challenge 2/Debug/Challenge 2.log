@@ -1,0 +1,6 @@
+﻿  main.cpp
+D:\Challenge 2\Challenge 2\main.cpp(29,20): warning C4018: '<': signed/unsigned mismatch
+D:\Challenge 2\Challenge 2\main.cpp(43,20): warning C4018: '<': signed/unsigned mismatch
+D:\Challenge 2\Challenge 2\main.cpp(69,20): warning C4018: '<': signed/unsigned mismatch
+D:\Challenge 2\Challenge 2\main.cpp(128,20): warning C4018: '<': signed/unsigned mismatch
+  Challenge 2.vcxproj -> D:\Challenge 2\Debug\Challenge 2.exe
