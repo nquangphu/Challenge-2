@@ -1,14 +1,12 @@
 ﻿#include <iostream>
 #include <fstream>
 #include <string>
-#include <sstream>
 #include <vector>
 
 using namespace std;
 
 
 struct NODE {
-	int data;
 	NODE* child[26];			//mảng lưu địa chỉ tới các node con của node đó
 	bool isEndOfWord;			//là true nếu node đó là kết thúc của 1 từ
 };
@@ -16,7 +14,6 @@ struct NODE {
 //Tạo 1 node rỗng 
 NODE* creatNode() {	
 	NODE* p = new NODE;
-	p->data = -1;
 	p->isEndOfWord = false;
 	for (int i = 0; i < 26; i++) p->child[i] = nullptr;
 
@@ -31,7 +28,6 @@ void insert(NODE* root, string s) {
 		int index = s[i] - 'a';
 
 		if (!p->child[index]) p->child[index] = creatNode();
-		p->child[index]->data = index;
 		p = p->child[index];
 	}
 
@@ -80,36 +76,26 @@ string input(int* freq) {
 	return prefixs;
 }
 
-string saveWord(int edw, int prev[]) {
-	int tmp[26];
-	string s;
-	for (int i = 0; i < 26; i++) tmp[i] = prev[i];
-
-	while (edw != -1) {
-		s += static_cast<char> (edw + 'a');
-		edw = prev[edw];
-	}
-
-	return s;
-}
-
-int wordCount(NODE* root, int freq[], int prev[], vector<string>& ss) {
+//CREAT WORD
+string s = "";
+int wordCount(NODE* root, int freq[], vector<string>& ss) {
 	int result = 0;
 
-	if (root->isEndOfWord) {
+	if ((root->isEndOfWord) && (s.size() > 2)) {
 		result++;
-		ss.push_back(saveWord(root->data, prev));
+		ss.push_back(s);
 	}
 
 	for (int i = 0; i < 26; i++) {
 		if (root->child[i] && freq[i] > 0) {
 			freq[i]--;
-			prev[i] = root->data;
-			result += wordCount(root->child[i], freq, prev, ss);
-			prev[i] = -1;
+			s += i + 'a';
+			result += wordCount(root->child[i], freq, ss);
 			freq[i]++;
+			s = s.substr(0, s.size() - 1);
 		}
 	}
+
 	return result;
 }
 
@@ -124,15 +110,13 @@ int main() {
 	readfile(f, root);					//Đọc file Dic.txt
 	string prefixs = input(freq);
 
-	int prev[26];
-	for (int i = 0; i < 26; i++) prev[i] = -1;
-	cout << wordCount(root, freq, prev, ss) << endl;
+	cout << wordCount(root, freq, ss) << endl;
 
 	for (int i = 0; i < ss.size(); i++) {
 		ss[i].reserve();
 		cout << ss[i] << endl;
 	}
-
+	
 	system("pause");
 	return 0;
 }
